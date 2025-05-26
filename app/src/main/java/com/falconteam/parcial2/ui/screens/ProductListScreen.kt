@@ -33,7 +33,11 @@ fun ProductListScreen(viewModel: ProductViewModel, navController: NavController)
     val uiState by viewModel.uiState.collectAsState()
     val products by viewModel.filteredProducts.collectAsState()
 
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         TextField(
             value = uiState.searchQuery,
             onValueChange = viewModel::updateSearch,
@@ -43,7 +47,9 @@ fun ProductListScreen(viewModel: ProductViewModel, navController: NavController)
 
         Spacer(Modifier.height(8.dp))
 
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier.weight(1f)
+        ) {
             items(products) { product ->
                 Card(
                     modifier = Modifier

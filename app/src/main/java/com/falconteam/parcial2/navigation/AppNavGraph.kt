@@ -16,26 +16,35 @@ fun AppNavGraph(
     viewModel: ProductViewModel
 ) {
     NavHost(navController = navController, startDestination = Routes.ProductList.route) {
+
         composable(Routes.ProductList.route) {
-            ProductListScreen(viewModel = viewModel, navController = navController)
+            ProductListScreen(
+                viewModel = viewModel,
+                navController = navController
+            )
         }
-        composable(Routes.ProductDetail.route) { backStackEntry ->
+
+        composable("product_detail/{productId}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
-            productId?.let {
-                val product = viewModel.getProductById(it)
-                product?.let {
+            productId?.let { id ->
+                val product = viewModel.getProductById(id)
+                product?.let { selectedProduct ->
                     ProductDetailScreen(
-                        product = product,
+                        product = selectedProduct,
                         onAddToCart = {
-                            viewModel.addToCart(product.id)
+                            viewModel.addToCart(selectedProduct.id)
                             navController.popBackStack()
                         }
                     )
                 }
             }
         }
+
         composable(Routes.Cart.route) {
-            CartScreen(cartItems = viewModel.getCart())
+            CartScreen(
+                cartItems = viewModel.getCart()
+            )
         }
     }
 }
+
